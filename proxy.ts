@@ -32,8 +32,5 @@ export const config = {
         "/finder/:path*",
         "/schedule/:path*",
         "/roadmap/:path*",
-        "/onboarding/:path*",
-        // Explicitly exclude NextAuth routes so they are not intercepted
-        "/((?!api/auth).*)",
     ],
 };
