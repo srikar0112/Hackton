@@ -12,16 +12,26 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 if (!credentials?.email) return null;
-                console.log("Login attempt for:", credentials.email);
-                const user = await prisma.user.findUnique({
-                    where: { email: credentials.email },
-                });
-                if (user) {
-                    console.log("User found:", user.email);
-                    return { id: user.id, name: user.name, email: user.email, role: user.role } as any;
+
+                try {
+                    const email = credentials.email.toLowerCase().trim();
+                    console.log("[Auth] Attempting login for:", email);
+
+                    const user = await prisma.user.findUnique({
+                        where: { email: email },
+                    });
+
+                    if (user) {
+                        console.log("[Auth] User found:", user.email);
+                        return { id: user.id, name: user.name, email: user.email, role: user.role } as any;
+                    }
+
+                    console.warn("[Auth] No user found with email:", email);
+                    return null;
+                } catch (error) {
+                    console.error("[Auth] Database error during login:", error);
+                    return null;
                 }
-                console.log("User not found:", credentials.email);
-                return null;
             },
         }),
     ],
