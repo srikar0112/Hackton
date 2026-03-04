@@ -17,19 +17,23 @@ export const authOptions: NextAuthOptions = {
                     const email = credentials.email.toLowerCase().trim();
                     console.log("[Auth] Attempting login for:", email);
 
+                    // Diagnostic: Check if we can even connect
+                    const userCount = await prisma.user.count();
+                    console.log("[Auth] Total users in DB:", userCount);
+
                     const user = await prisma.user.findUnique({
                         where: { email: email },
                     });
 
                     if (user) {
-                        console.log("[Auth] User found:", user.email);
+                        console.log("[Auth] User found successfully:", user.email);
                         return { id: user.id, name: user.name, email: user.email, role: user.role } as any;
                     }
 
                     console.warn("[Auth] No user found with email:", email);
                     return null;
-                } catch (error) {
-                    console.error("[Auth] Database error during login:", error);
+                } catch (error: any) {
+                    console.error("[Auth] Database error during login:", error.message || error);
                     return null;
                 }
             },
