@@ -70,9 +70,10 @@ export default function DashboardPage() {
 
     useEffect(() => {
         // Load dashboard data
-        fetch("/api/schedule").then(r => r.json()).then(d => { setData(d); setLoading(false); }).catch(() => setLoading(false));
+        fetch("/api/schedule").then(r => r.ok ? r.json() : null).then(d => { if (d) setData(d); setLoading(false); }).catch(() => setLoading(false));
         // Check onboarding status
-        fetch("/api/onboarding").then(r => r.json()).then(d => {
+        fetch("/api/onboarding").then(r => r.ok ? r.json() : null).then(d => {
+            if (!d) return;
             setOnboardingDone(d.onboardingDone);
             setPersonality(d.personality);
 
@@ -91,7 +92,7 @@ export default function DashboardPage() {
                 // Goal-First Architecture: Redirect to blank state
                 router.push("/goal");
             }
-        });
+        }).catch(() => { });
     }, [router]);
 
     const handleComplete = async (taskId: string) => {

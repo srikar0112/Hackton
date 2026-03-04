@@ -5,11 +5,11 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 const DEMO_ACCOUNTS = [
-    { email: "admin@bio-adaptive.edu", role: "Admin", icon: "🛡️" },
+    { email: "srikar@demo.com", role: "Srikar", icon: "🦁" },
     { email: "alex@bio-adaptive.edu", role: "Student", icon: "🎓" },
+    { email: "admin@bio-adaptive.edu", role: "Admin", icon: "🛡️" },
     { email: "sarah@bio-adaptive.edu", role: "Professor", icon: "📚" },
     { email: "guest@bio-adaptive.edu", role: "Normal", icon: "👤" },
-    { email: "support@bio-adaptive.edu", role: "Technical", icon: "⚙️" },
 ];
 
 export default function LoginPage() {

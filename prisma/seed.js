@@ -17,6 +17,9 @@ async function main() {
   const admin = await prisma.user.create({
     data: { name: "Admin User", email: "admin@bio-adaptive.edu", role: "ADMIN", chronotype: "BEAR", baseSleepNeed: 8, onboardingDone: true },
   });
+  const srikar = await prisma.user.create({
+    data: { name: "Srikar", email: "srikar@demo.com", role: "STUDENT", chronotype: "BEAR", baseSleepNeed: 8, onboardingDone: true },
+  });
   const student = await prisma.user.create({
     data: { name: "Alex Student", email: "alex@bio-adaptive.edu", role: "STUDENT", chronotype: "WOLF", baseSleepNeed: 7, onboardingDone: true },
   });
@@ -40,6 +43,16 @@ async function main() {
       resourcePrefs: "Video",
       institution: "State University",
       gradeLevel: "Year 2",
+    },
+  });
+
+  await prisma.userProfile.create({
+    data: {
+      userId: srikar.id,
+      subjects: JSON.stringify(["Mathematics", "Physics"]),
+      goals: JSON.stringify(["Railway Removal", "Local Flow"]),
+      learningStyle: "Hands-on",
+      resourcePrefs: "Video",
     },
   });
 
