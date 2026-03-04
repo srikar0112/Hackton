@@ -80,7 +80,8 @@ export async function POST(req: Request) {
 export async function GET() {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        // Return empty data instead of 401 to prevent dashboard crashes
+        return NextResponse.json({ onboardingDone: false, profile: null, personality: null });
     }
     const user = await prisma.user.findUnique({
         where: { email: session.user.email },

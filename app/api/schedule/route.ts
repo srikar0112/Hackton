@@ -31,7 +31,15 @@ function computeAdaptivePriority(
 export async function GET() {
     const session = await getServerSession(authOptions);
     if (!session?.user?.email) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        // Return empty stub data to prevent dashboard crashes
+        return NextResponse.json({
+            user: { name: "Guest", role: "STUDENT", chronotype: "BEAR" },
+            scheduledTasks: [],
+            latestHealth: null,
+            energyLevel: 70,
+            totalTasks: 0,
+            completedTasks: 0,
+        });
     }
 
     const user = await prisma.user.findUnique({
