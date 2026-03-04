@@ -12,16 +12,20 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 if (!credentials?.email) return null;
+                console.log("Login attempt for:", credentials.email);
                 const user = await prisma.user.findUnique({
                     where: { email: credentials.email },
                 });
                 if (user) {
+                    console.log("User found:", user.email);
                     return { id: user.id, name: user.name, email: user.email, role: user.role } as any;
                 }
+                console.log("User not found:", credentials.email);
                 return null;
             },
         }),
     ],
+    secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
