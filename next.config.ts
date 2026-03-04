@@ -2,11 +2,11 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: {
-    ignoreBuildErrors: true, // Allow Vercel deploy with type warnings
+    ignoreBuildErrors: true,
   },
   experimental: {
     serverActions: {
-      allowedOrigins: ["localhost:3000"],
+      allowedOrigins: ["localhost:3000", "*.up.railway.app", "*.railway.app"],
     },
   },
 };
