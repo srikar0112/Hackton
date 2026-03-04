@@ -48,9 +48,13 @@ function ComplexityBadge({ n }: { n: number }) {
 }
 
 function DeadlineBadge({ deadline }: { deadline: string }) {
-    const hours = (new Date(deadline).getTime() - Date.now()) / 3_600_000;
-    const col = hours < 24 ? "#f87171" : hours < 72 ? "#fbbf24" : "#8b8ba8";
-    const label = hours < 1 ? "< 1hr" : hours < 24 ? `${Math.round(hours)}h` : `${Math.round(hours / 24)}d`;
+    const [hoursLeft, setHoursLeft] = useState<number | null>(null);
+    useEffect(() => {
+        setHoursLeft((new Date(deadline).getTime() - Date.now()) / 3_600_000);
+    }, [deadline]);
+    if (hoursLeft === null) return <span style={{ fontSize: "0.8rem", color: "#8b8ba8", fontWeight: 600 }}>⏰ --</span>;
+    const col = hoursLeft < 24 ? "#f87171" : hoursLeft < 72 ? "#fbbf24" : "#8b8ba8";
+    const label = hoursLeft < 1 ? "< 1hr" : hoursLeft < 24 ? `${Math.round(hoursLeft)}h` : `${Math.round(hoursLeft / 24)}d`;
     return <span style={{ fontSize: "0.8rem", color: col, fontWeight: 600 }}>⏰ {label}</span>;
 }
 
@@ -64,9 +68,12 @@ export default function DashboardPage() {
     const [primaryGoal, setPrimaryGoal] = useState<string | null>(null);
     const router = require("next/navigation").useRouter();
 
+    const [greeting, setGreeting] = useState("Good day");
     const role = (session?.user as any)?.role ?? "STUDENT";
-    const hour = new Date().getHours();
-    const greeting = hour < 12 ? "Morning" : hour < 18 ? "Afternoon" : "Evening";
+    useEffect(() => {
+        const hour = new Date().getHours();
+        setGreeting(hour < 12 ? "Morning" : hour < 18 ? "Afternoon" : "Evening");
+    }, []);
 
     useEffect(() => {
         // Load dashboard data
